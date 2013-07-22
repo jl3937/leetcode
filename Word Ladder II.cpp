@@ -1,9 +1,9 @@
 class Solution {
-  vector<vector<int> > adj; // prev node in shortest path
+  vector<vector<int> > adj;  // prev node in shortest path
   vector<string> dict_vector;
   map<string, int> dict_map;
-  
-public:
+
+ public:
   vector<vector<string> > findLadders(string start,
                                       string end,
                                       unordered_set<string>& dict) {
@@ -11,16 +11,16 @@ public:
     // DO NOT write int main() function
     int n = dict.size();
     int len = (*dict.begin()).size();
-    
+
     dict_vector.clear();
     dict_vector.resize(n);
     dict_map.clear();
     int i = 0;
-    for (const auto& word: dict) {
+    for (const auto& word : dict) {
       dict_vector[i] = word;
       dict_map[word] = i++;
     }
-    
+
     unordered_set<string> visited;
     set<string> level[2];
     bool l = false;
@@ -28,12 +28,11 @@ public:
     visited.insert(start);
     bool found = false;
     int d = 1;
-    
-    
+
     adj.clear();
     adj.resize(n);
     while (!found && !level[l].empty()) {
-      for (const auto& word:level[l]) {
+      for (const auto& word : level[l]) {
         string s = word;
         int prev = dict_map[s];
         for (int j = 0; j < len; j++) {
@@ -54,7 +53,7 @@ public:
           s[j] = orig_ch;
         }
       }
-      for (const auto& word: level[!l]) {
+      for (const auto& word : level[!l]) {
         visited.insert(word);
       }
       level[l].clear();
@@ -70,7 +69,7 @@ public:
     }
     return findPaths(dict, e);
   }
-  
+
   vector<vector<string> > findPaths(unordered_set<string>& dict, int e) {
     vector<vector<string> > r;
     if (adj[e].empty()) {
