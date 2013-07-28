@@ -11,12 +11,14 @@ public:
     } else if (p[j + 1] == '*') {
       if (isMatch(s, p, i, j + 2))
         return true;
-      for (int k = 0; s[i + k] == p[j]; k++) {
+      for (int k = 0; s[i + k] != '\0' && p[j] == '.' || s[i + k] == p[j];
+           k++) {
         if (isMatch(s, p, i + k + 1, j + 2))
           return true;
       }
       return false;
     }
-    return (p[j] == '.' || s[i] == p[j]) && isMatch(s, p, i + 1, j + 1);
+    return (s[i] != '\0' && p[j] == '.' || s[i] == p[j]) &&
+           isMatch(s, p, i + 1, j + 1);
   }
 };
