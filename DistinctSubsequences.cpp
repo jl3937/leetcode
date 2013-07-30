@@ -17,10 +17,9 @@ public:
           num[j] = 0;
           continue;
         }
-        num[j] = 0;
-        for (int k = j - 1; k >= 0; k--) {
-          if (S[k] == T[i - 1])
-            num[j] += old_num[k];
+        num[j] = num[j - 1];
+        if (S[j - 1] == T[i - 1]) {
+          num[j] += old_num[j - 1];
         }
       }
     }
