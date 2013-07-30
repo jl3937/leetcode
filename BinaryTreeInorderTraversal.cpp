@@ -15,25 +15,20 @@ public:
     vector<int> r;
     if (!root)
       return r;
-    stack<pair<TreeNode *, int> > s;
-    s.push(make_pair(root, 0));
+    stack<TreeNode *> s;
+    TreeNode *node = root;
+    while (root) {
+      s.push(root);
+      root = root->left;
+    }
     while (!s.empty()) {
-      int state = s.top().second;
-      TreeNode* node = s.top().first;
-      switch (state) {
-        case 0:
-          s.top().second++;
-          if (node->left)
-            s.push(make_pair(node->left, 0));
-          break;
-        case 1:
-          r.push_back(node->val);
-          s.top().second++;
-          if (node->right)
-            s.push(make_pair(node->right, 0));
-          break;
-        case 2:
-          s.pop();
+      TreeNode* node = s.top();
+      s.pop();
+      r.push_back(node->val);
+      node = node->right;
+      while (node) {
+        s.push(node);
+        node = node->left;
       }
     }
     return r;
