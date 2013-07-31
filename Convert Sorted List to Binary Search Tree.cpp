@@ -16,31 +16,35 @@
  * };
  */
 class Solution {
+ private:
+  ListNode* sortedListToBST(ListNode* head, TreeNode* root, int n) {
+    int mid = n / 2;
+    if (mid > 0) {
+      root->left = new TreeNode(0);
+      head = sortedListToBST(head, root->left, mid);
+    }
+    root->val = head->val;
+    head = head->next;
+    if (mid + 1 < n) {
+      root->right = new TreeNode(0);
+      head = sortedListToBST(head, root->right, n - mid - 1);
+    }
+    return head;
+  }
  public:
   TreeNode* sortedListToBST(ListNode* head) {
     // Start typing your C/C++ solution below
     // DO NOT write int main() function
-    int n = 0;
+    if (!head)
+      return NULL;
     ListNode* cur = head;
-    while(cur) {
+    int n = 0;
+    while (cur) {
       n++;
       cur = cur->next;
     }
-    return sortedListToBST(&head, 0, n - 1);
-  }
-
- private:
-  TreeNode* sortedListToBST(ListNode** head, int start, int end) {
-    if (start > end)
-      return NULL;
-    int mid = (start + end) / 2;
-    TreeNode* left = sortedListToBST(head, start, mid - 1);
-    TreeNode* parent = new TreeNode((*head)->val);
-    // value of *head needs to be passed out.
-    *head = (*head)->next;
-    TreeNode* right = sortedListToBST(head, mid + 1, end);
-    parent->left = left;
-    parent->right = right;
-    return parent;
+    TreeNode* root = new TreeNode(0);
+    sortedListToBST(head, root, n);
+    return root;
   }
 };
