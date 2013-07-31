@@ -1,40 +1,34 @@
 class Solution {
-public:
+ public:
   string minWindow(string S, string T) {
-    // for each ascii char, compute the counts in T
+    // Start typing your C/C++ solution below
+    // DO NOT write int main() function
+    int m = S.size(), n = T.size();
     int count[256];
     memset(count, 0, sizeof(count));
-    int non_zero = 0;
-    for (int i = 0; i < T.size(); i++) {
-      if (count[T[i]] == 0)
-        non_zero++;
+    for (int i = 0; i < n; i++) {
       count[T[i]]++;
     }
-    
+    int min_window = INT_MAX;
+    int min_index = -1;
+    int match = n;
     int start = 0;
-    int min_start = 0;
-    int min_len = 0;
-    for (int i = 0; i < S.size(); i++) {
+    for (int i = 0; i < m; i++) {
       count[S[i]]--;
-      
-      // phase one: find a substring covering T
-      if (count[S[i]] == 0) {
-        non_zero--;
+      if (count[S[i]] >= 0) {
+        match--;
       }
-      
-      // phase two: while ensuring covering T, move the start pointer
-      if (non_zero == 0) {
-        while (count[S[start]] < 0) {
-          count[S[start]]++;
-          start++;
-        }
-        int len = i - start + 1;
-        if (min_len == 0 || len < min_len) {
-          min_start = start;
-          min_len = len;
-        }
+      while (count[S[start]] < 0) {
+        count[S[start]]++;
+        start++;
+      }
+      if (match == 0 && i - start + 1 < min_window) {
+        min_window = i - start + 1;
+        min_index = start;
       }
     }
-    return S.substr(min_start, min_len);
+    if (min_index != -1)
+      return S.substr(min_index, min_window);
+    return "";
   }
 };
