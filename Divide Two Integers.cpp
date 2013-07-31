@@ -1,37 +1,29 @@
 class Solution {
-public:
+ public:
   int divide(int dividend, int divisor) {
     // Start typing your C/C++ solution below
     // DO NOT write int main() function
-    long long dividend_ll = dividend;
-    long long divisor_ll = divisor;
-    bool negative = false;
-    if (dividend_ll < 0) {
-      dividend_ll = -dividend_ll;
-      negative = !negative;
-    }
-    if (divisor_ll < 0) {
-      negative = !negative;
-      divisor_ll = -divisor_ll;
-    }
-    
-    long long r;
+    long long a = dividend, b = divisor;
+    if (a < 0)
+      a = -a;
+    if (b < 0)
+      b = -b;
     int i = 31;
     long long cur = 0;
+    long long r = 0;
     while (i >= 0) {
-      int d = 0;
       cur <<= 1;
-      cur |= (dividend_ll >> i) & 1;
-      while (cur >= divisor_ll) {
-        cur -= divisor_ll;
-        d++;
-      }
       r <<= 1;
-      r |= d;
+      cur |= (a >> i) & 1;
+      if (cur >= b) {
+        cur -= b;
+        r |= 1;
+      }
       i--;
     }
-    if (negative)
+    if (dividend >> 31 ^ divisor >> 31) {
       r = -r;
+    }
     return r;
   }
 };
