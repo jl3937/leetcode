@@ -1,34 +1,42 @@
+/**
+ * Definition for an interval.
+ * struct Interval {
+ *     int start;
+ *     int end;
+ *     Interval() : start(0), end(0) {}
+ *     Interval(int s, int e) : start(s), end(e) {}
+ * };
+ */
 class Solution {
+  struct Cmp {
+    bool operator()(const Interval &l, const Interval &r) {
+      return l.start < r.start;
+    }
+  } cmp;
+
 public:
-  int threeSumClosest(vector<int> &num, int target) {
+  vector<Interval> merge(vector<Interval> &intervals) {
     // Start typing your C/C++ solution below
     // DO NOT write int main() function
-    sort(num.begin(), num.end());
-    int minDiff;
-    bool first = true;
-    for (int i = 0; i < num.size() - 2; i++) {
-      if (i > 0 && num[i] == num[i - 1]) {
-        continue;
-      }
-      int j = i + 1;
-      int k = num.size() - 1;
-      while (j < k) {
-        int sum = num[i] + num[j] + num[k];
-        if (sum == target) {
-          return sum;
-        } else if (sum > target) {
-          k--;
-        } else {
-          j++;
-        }
-        if (first) {
-          minDiff = sum - target;
-          first = false;
-        } else if (abs(sum - target) < abs(minDiff)) {
-          minDiff = sum - target;
-        }
+    vector<Interval> r;
+    if (intervals.empty())
+      return r;
+
+    sort(intervals.begin(), intervals.end(),
+         [](const Interval & a, const Interval & b) {
+      return a.start < b.start;
+    });
+    int s = intervals[0].start, e = intervals[0].end;
+    for (int i = 1; i < intervals.size(); i++) {
+      if (intervals[i].start > e) {
+        r.push_back(Interval(s, e));
+        s = intervals[i].start;
+        e = intervals[i].end;
+      } else if (intervals[i].end > e) {
+        e = intervals[i].end;
       }
     }
-    return minDiff + target;
+    r.push_back(Interval(s, e));
+    return r;
   }
 };
