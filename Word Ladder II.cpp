@@ -1,90 +1,84 @@
 class Solution {
-  vector<vector<int> > adj;  // prev node in shortest path
+  vector<vector<string> > r;
+  vector<vector<int> > pre; // predecessors in shortest path
   vector<string> dict_vector;
-  map<string, int> dict_map;
+  unordered_map<string, int> dict_map;
 
- public:
-  vector<vector<string> > findLadders(string start,
-                                      string end,
-                                      unordered_set<string>& dict) {
+public:
+  vector<vector<string> > findLadders(string start, string end,
+                                      unordered_set<string> &dict) {
     // Start typing your C/C++ solution below
     // DO NOT write int main() function
     int n = dict.size();
-    int len = (*dict.begin()).size();
-
     dict_vector.clear();
     dict_vector.resize(n);
     dict_map.clear();
     int i = 0;
-    for (const auto& word : dict) {
+    for (const auto &word : dict) {
       dict_vector[i] = word;
       dict_map[word] = i++;
     }
 
-    unordered_set<string> visited;
-    set<string> level[2];
-    bool l = false;
-    level[0].insert(start);
-    visited.insert(start);
-    bool found = false;
-    int d = 1;
-
-    adj.clear();
-    adj.resize(n);
-    while (!found && !level[l].empty()) {
-      for (const auto& word : level[l]) {
-        string s = word;
-        int prev = dict_map[s];
-        for (int j = 0; j < len; j++) {
-          int orig_ch = s[j];
-          for (int ch = 'a'; ch <= 'z'; ch++) {
-            if (orig_ch != ch) {
-              s[j] = ch;
-              if (!visited.count(s)) {
-                if (dict.count(s)) {
-                  if (s == end)
-                    found = true;
-                  adj[dict_map[s]].push_back(prev);
-                  level[!l].insert(s);
+    r.clear();
+    pre.clear();
+    pre.resize(n);
+    set<int> level[2];
+    vector<bool> visited(n);
+    for (int i = 0; i < n; i++) {
+      visited[i] = false;
+    }
+    int start_index = dict_map[start];
+    int end_index = dict_map[end];
+    level[0].insert(start_index);
+    visited[start_index] = true;
+    i = 0;
+    int len = 1;
+    int word_len = (*dict.begin()).size();
+    while (!level[i].empty()) {
+      for (int orig_index : level[i]) {
+        string word = dict_vector[orig_index];
+        for (int index = 0; index < word_len; index++) {
+          int orig_ch = word[index];
+          for (char ch = 'a'; ch <= 'z'; ch++) {
+            if (ch != orig_ch) {
+              word[index] = ch;
+              auto iter = dict_map.find(word);
+              if (iter != dict_map.end()) {
+                int next_index = iter->second;
+                if (!visited[next_index]) {
+                  pre[next_index].push_back(orig_index);
+                  level[1 - i].insert(next_index);
                 }
               }
             }
           }
-          s[j] = orig_ch;
+          word[index] = orig_ch;
         }
       }
-      for (const auto& word : level[!l]) {
-        visited.insert(word);
+      level[i].clear();
+      i = 1 - i;
+      for (int next_index : level[i]) {
+        visited[next_index] = true;
+        if (next_index == end_index) {
+          level[i].clear();
+          break;
+        }
       }
-      level[l].clear();
-      l = !l;
-      d++;
-      if (d == n)
-        break;
+      len++;
     }
-    int e = dict_map[end];
-    if (adj[e].empty()) {
-      vector<vector<string> > r;
-      return r;
-    }
-    return findPaths(dict, e);
-  }
-
-  vector<vector<string> > findPaths(unordered_set<string>& dict, int e) {
-    vector<vector<string> > r;
-    if (adj[e].empty()) {
-      vector<string> path;
-      path.push_back(dict_vector[e]);
-      r.push_back(path);
-      return r;
-    }
-    for (int i = 0; i < adj[e].size(); i++) {
-      vector<vector<string> > paths = findPaths(dict, adj[e][i]);
-      for (int j = 0; j < paths.size(); j++) {
-        paths[j].push_back(dict_vector[e]);
-        r.push_back(paths[j]);
-      }
-    }
+    vector<string> path(len);
+    path[len - 1] = end;
+    findPath(path, len - 1, end_index);
     return r;
+  }
+  void findPath(vector<string> &path, int i, int index) {
+    if (i == 0) {
+      r.push_back(path);
+      return;
+    }
+    for (int pre_index : pre[index]) {
+      path[i - 1] = dict_vector[pre_index];
+      findPath(path, i - 1, pre_index);
+    }
   }
 };
