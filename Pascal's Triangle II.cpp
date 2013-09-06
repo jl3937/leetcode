@@ -1,20 +1,18 @@
 class Solution {
- public:
+public:
   vector<int> getRow(int rowIndex) {
-    vector<int> row;
-    row.push_back(1);
-    if (rowIndex == 0) {
-      return row;
-    }
+    // Start typing your C/C++ solution below
+    // DO NOT write int main() function
+    vector<int> r(rowIndex + 1);
+    r[0] = 1;
+    if (rowIndex == 0)
+      return r;
     for (int i = 1; i <= rowIndex; i++) {
-      vector<int> old_row(row);
-      row.clear();
-      row.push_back(1);
-      for (int j = 0; j < old_row.size() - 1; j++) {
-        row.push_back(old_row[j] + old_row[j + 1]);
+      r[i] = 1;
+      for (int j = i - 1; j >= 1; j--) {
+        r[j] += r[j - 1];
       }
-      row.push_back(1);
     }
-    return row;
+    return r;
   }
 };
