@@ -3,19 +3,11 @@ public:
   int maxProfit(vector<int> &prices) {
     // Start typing your C/C++ solution below
     // DO NOT write int main() function
-    if (prices.empty())
-      return 0;
+    int n = prices.size();
     int profit = 0;
-    int prev = prices[0];
-    int buy_price = prices[0];
     for (int i = 1; i < prices.size(); i++) {
-      if (prices[i] < prev) {
-        profit += prev - buy_price;
-        buy_price = prices[i];
-      }
-      prev = prices[i];
+      profit += max(prices[i] - prices[i - 1], 0);
     }
-    profit += prev - buy_price;
     return profit;
   }
 };
