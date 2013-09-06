@@ -4,7 +4,7 @@ public:
     // Start typing your C/C++ solution below
     // DO NOT write int main() function
     int n = prices.size();
-    vector<int> front;
+    vector<int> front; // max profit ending at day i
     front.resize(n);
     int min = INT_MAX;
     int profit = 0;
@@ -15,8 +15,8 @@ public:
         profit = prices[i] - min;
       front[i] = profit;
     }
-    
-    vector<int> back;
+
+    vector<int> back; // max profit starting from day i
     back.resize(n);
     int max = INT_MIN;
     profit = 0;
@@ -27,6 +27,7 @@ public:
         profit = max - prices[i];
       back[i] = profit;
     }
+
     int max_profit = 0;
     for (int i = 0; i < n; i++) {
       if (front[i] + back[i] > max_profit)
