@@ -7,32 +7,33 @@
  * };
  */
 class Solution {
- public:
-  void connect(TreeLinkNode* root) {
+public:
+  void connect(TreeLinkNode *root) {
     // Start typing your C/C++ solution below
     // DO NOT write int main() function
-    if (!root)
-      return;
-    queue<TreeLinkNode*> q;
-    q.push(root);
-    TreeLinkNode* prev = NULL;
-    while (!q.empty()) {
-      TreeLinkNode* node = q.front();
-      q.pop();
-      if (node->left) {
-        q.push(node->left);
-        if (prev)
-          prev->next = node->left;
-        prev = node->left;
-      }
-      if (node->right) {
-        q.push(node->right);
-        if (prev)
-          prev->next = node->right;
-        prev = node->right;
-      }
-      if (!node->next) {
-        prev = NULL;
+    TreeLinkNode *head = root;
+    while (head) {
+      TreeLinkNode *node = head;
+      head = NULL;
+      TreeLinkNode *prev = NULL;
+      while (node) {
+        if (node->left) {
+          if (prev) {
+            prev->next = node->left;
+          } else {
+            head = node->left;
+          }
+          prev = node->left;
+        }
+        if (node->right) {
+          if (prev) {
+            prev->next = node->right;
+          } else {
+            head = node->right;
+          }
+          prev = node->right;
+        }
+        node = node->next;
       }
     }
   }
