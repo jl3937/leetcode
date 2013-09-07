@@ -3,26 +3,15 @@ public:
   int numDistinct(string S, string T) {
     // Start typing your C/C++ solution below
     // DO NOT write int main() function
-    int num[11000];
-    int old_num[11000];
     int m = S.size(), n = T.size();
-    for (int i = 0; i <= n; i++) {
-      memcpy(old_num, num, sizeof(old_num));
-      for (int j = 0; j <= m; j++) {
-        if (i == 0) {
-          num[j] = 1;
-          continue;
-        }
-        if (i > j) {
-          num[j] = 0;
-          continue;
-        }
-        num[j] = num[j - 1];
-        if (S[j - 1] == T[i - 1]) {
-          num[j] += old_num[j - 1];
-        }
+    int num[50];
+    memset(num, 0, sizeof(num));
+    num[0] = 1;
+    for (int i = 1; i <= m; i++) {
+      for (int j = min(n, i); j >= 1; j--) {
+        num[j] = num[j - 1] * (S[i - 1] == T[j - 1]) + num[j];
       }
     }
-    return num[m];
+    return num[n];
   }
 };
