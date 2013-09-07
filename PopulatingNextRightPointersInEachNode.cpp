@@ -7,19 +7,26 @@
  * };
  */
 class Solution {
- public:
-  void connect(TreeLinkNode* root) {
+public:
+  void connect(TreeLinkNode *root) {
     // Start typing your C/C++ solution below
     // DO NOT write int main() function
-    if (!root)
+    if (root == NULL)
       return;
-    connect(root->left);
-    connect(root->right);
-    TreeLinkNode* left = root->left, *right = root->right;
-    while (left && right) {
-      left->next = right;
-      left = left->right;
-      right = right->left;
+    TreeLinkNode *head = root;
+    while (head->left) {
+      TreeLinkNode *node = head;
+      head = head->left;
+      while (true) {
+        node->left->next = node->right;
+        if (node->next) {
+          node->right->next = node->next->left;
+          node = node->next;
+        } else {
+          node->right->next = NULL;
+          break;
+        }
+      }
     }
   }
 };
