@@ -6,7 +6,7 @@ public:
     vector<bool> match(s.size() + 1);
     match[0] = true;
     for (int i = 1; i <= s.size(); i++) {
-      for (int j = 0; j < i; j++) {
+      for (int j = i - 1; j >= 0; j--) {
         if (match[j] && dict.count(s.substr(j, i - j))) {
           match[i] = true;
           break;
