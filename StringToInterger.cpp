@@ -1,6 +1,6 @@
 class Solution {
- public:
-  int atoi(const char* str) {
+public:
+  int atoi(const char *str) {
     // Start typing your C/C++ solution below
     // DO NOT write int main() function
     if (str[0] == 0)
@@ -20,16 +20,11 @@ class Solution {
       i++;
     }
     while (str[i] && isdigit(str[i])) {
-      if (INT_MAX / 10 >= val) {
-        val *= 10;
-        int d = str[i] - '0';
-        if (INT_MAX - d >= val || d != 0 && negative && INT_MAX - d + 1 >= val)
-          val += d;
-        else
-          return negative ? INT_MIN : INT_MAX;
-      } else {
-        return negative ? INT_MIN : INT_MAX;
-      }
+      val = 10 * val + str[i] - '0';
+      if (!negative && val > INT_MAX)
+        return INT_MAX;
+      if (negative && val - 1 > INT_MAX)
+        return INT_MIN;
       i++;
     }
     return negative ? -val : val;
