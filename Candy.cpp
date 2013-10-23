@@ -3,29 +3,23 @@ public:
   int candy(vector<int> &ratings) {
     // Note: The Solution object is instantiated only once and is reused by each
     // test case.
-    vector<int> candies(ratings.size());
-    for (int i = 0; i < candies.size(); i++) {
-      candies[i] = 1;
-    }
-    bool change = true;
-    while (change) {
-      change = false;
-      for (int i = 0; i < candies.size(); i++) {
-        if (i > 0 && ratings[i] > ratings[i - 1] &&
-            candies[i] <= candies[i - 1]) {
-          candies[i] = candies[i - 1] + 1;
-          change = true;
-        }
-        if (i < candies.size() - 1 && ratings[i] > ratings[i + 1] &&
-            candies[i] <= candies[i + 1]) {
-          candies[i] = candies[i + 1] + 1;
-          change = true;
-        }
+    int n = ratings.size();
+    vector<int> candies(n);
+    candies[0] = 1;
+    for (int i = 1; i < n; i++) {
+      if (ratings[i] > ratings[i - 1]) {
+        candies[i] = candies[i - 1] + 1;
+      } else {
+        candies[i] = 1;
       }
     }
-    int sum = 0;
-    for (int i = 0; i < candies.size(); i++)
+    int sum = candies[n - 1];
+    for (int i = n - 2; i >= 0; i--) {
+      if (ratings[i] > ratings[i + 1]) {
+        candies[i] = max(candies[i], candies[i + 1] + 1);
+      }
       sum += candies[i];
+    }
     return sum;
   }
 };
