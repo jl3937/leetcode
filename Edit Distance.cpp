@@ -8,9 +8,7 @@ public:
     int n = word2.size();
     for (int i = 0; i <= m; i++) {
       for (int j = 0; j <= n; j++) {
-        if (i != 0 || j != 0) {
-          s[i][j] = m + n;
-        }
+        s[i][j] = i + j;
         if (i > 0 && j > 0) {
           if (word1[i - 1] == word2[j - 1]) {
             if (s[i - 1][j - 1] < s[i][j]) {

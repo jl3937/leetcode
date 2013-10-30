@@ -8,32 +8,25 @@
  * };
  */
 class Solution {
- public:
-  bool isBalanced(TreeNode* root) {
+  int heightIfBalanced(TreeNode *root) {
+    if (!root)
+      return 0;
+    int left = heightIfBalanced(root->left);
+    if (left == -1)
+      return -1;
+    int right = heightIfBalanced(root->right);
+    if (right == -1)
+      return -1;
+    if (abs(left - right) > 1) {
+      return -1;
+    }
+    return max(left, right) + 1;
+  }
+  
+public:
+  bool isBalanced(TreeNode *root) {
     // Start typing your C/C++ solution below
     // DO NOT write int main() function
-    if (!root)
-      return true;
-    if (!root->left && !root->right) {
-      root->val = 1;
-      return true;
-    }
-    int left_height = 0, right_height = 0;
-    if (root->left) {
-      if (!isBalanced(root->left))
-        return false;
-      else
-        left_height = root->left->val;
-    }
-    if (root->right) {
-      if (!isBalanced(root->right))
-        return false;
-      else
-        right_height = root->right->val;
-    }
-    if (left_height - right_height > 1 || left_height - right_height < -1)
-      return false;
-    root->val = max(left_height, right_height) + 1;
-    return true;
+    return heightIfBalanced(root) != -1;
   }
 };

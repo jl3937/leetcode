@@ -1,32 +1,27 @@
 class Solution {
+  int longest, start, len;
+  void updateLongest(string &s, int left, int right, int length) {
+    while (left >= 0 && right < s.size() && s[left] == s[right]) {
+      length += 2;
+      left--;
+      right++;
+    }
+    if (length > longest) {
+      longest = length;
+      start = left + 1;
+      len = right - left - 1;
+    }
+  }
+  
 public:
   string longestPalindrome(string s) {
-    // Start typing your C/C++ solution below
-    // DO NOT write int main() function
-    int max = 0;
-    string maxString;
-    for (int i = 0; i < s.length(); i++) {
-      for (int j = s.length() - 1; j >= i; j--) {
-        int b = i;
-        int e = j;
-        bool p = true;
-        while (b <= e) {
-          if (s[b] != s[e]) {
-            p = false;
-            break;
-          }
-          b++;
-          e--;
-        }
-        if (p) {
-          if (max < j - i + 1) {
-            max = j - i + 1;
-            maxString = s.substr(i, max);
-          }
-          break;
-        }
-      }
+    if (s.empty())
+      return s;
+    longest = 0;
+    for (int i = 0; i < s.size(); i++) {
+      updateLongest(s, i - 1, i + 1, 1);
+      updateLongest(s, i, i + 1, 0);
     }
-    return maxString;
+    return s.substr(start, len);
   }
 };
